@@ -19,8 +19,10 @@ public class ScrewUpServerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String...args) throws Exception {
-		User user1 = new User("Devon", "111", "5000");
-		User user2 = new User("Zac", "222", "10000");
+		User user1 = new User("Devon", "111");
+		User user2 = new User("Alex", "222");
+		user1.setMonthlyNet("5000");
+		user2.setMonthlyNet("10000");
 		repo.save(user1);
 		repo.save(user2);
 	}

@@ -18,6 +18,7 @@ import java.util.Map;
 public class UserController {
 
     private static final String VIEW_INDEX = "user";
+    private static final String VIEW_USER = "user/{username}";
 
     @Autowired
     UserRepository repo;
@@ -37,6 +38,24 @@ public class UserController {
         User temp = repo.findByUsername(username);
         return temp;
     }
+
+    @RequestMapping(value = "/user/{username}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String setMonthlyNet(@PathVariable String username, @RequestBody String monthlyNet) {
+        User user = findByUsername(username);
+        user.setMonthlyNet(monthlyNet);
+        repo.saveAndFlush(user);
+        System.out.println(user.getMonthlyNet());
+        return monthlyNet;
+
+    }
+
+    @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+    public String getMonthlyNet(@PathVariable String username) {
+        User user = repo.findByUsername(username);
+        return user.getMonthlyNet();
+    }
+
+
 
 
 
