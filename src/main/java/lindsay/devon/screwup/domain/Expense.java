@@ -1,6 +1,7 @@
 package lindsay.devon.screwup.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Entity
 public class Expense {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -20,8 +22,8 @@ public class Expense {
     @JsonBackReference
     private User user;
 
-    private String name;
-    private String cost;
+    private String name = "empty";
+    private String cost = "empty";
 
     public Expense() {}
 

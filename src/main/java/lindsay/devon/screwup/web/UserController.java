@@ -29,7 +29,9 @@ public class UserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody User createNewUser(@RequestBody User user) {
+        user.fillBudget();
         repo.saveAndFlush(user);
+
         return user;
     }
 
@@ -39,21 +41,30 @@ public class UserController {
         return temp;
     }
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String setMonthlyNet(@PathVariable String username, @RequestBody String monthlyNet) {
-        User user = findByUsername(username);
-        user.setMonthlyNet(monthlyNet);
-        repo.saveAndFlush(user);
-        System.out.println(user.getMonthlyNet());
-        return monthlyNet;
-
+    @RequestMapping(value = "/fillbudget/{username}", method = RequestMethod.GET)
+    public User fillBudget(@PathVariable String username) {
+        User temp = repo.findByUsername(username);
+        temp.fillBudget();
+        return temp;
     }
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
-    public String getMonthlyNet(@PathVariable String username) {
-        User user = repo.findByUsername(username);
-        return user.getMonthlyNet();
-    }
+//    @RequestMapping(value = "/user/{username}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public String setMonthlyNet(@PathVariable String username, @RequestBody String monthlyNet) {
+//        User user = findByUsername(username);
+//        user.setMonthlyNet(monthlyNet);
+//        repo.saveAndFlush(user);
+//        System.out.println(user.getMonthlyNet());
+//        return monthlyNet;
+//
+//    }
+//
+//    @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+//    public String getMonthlyNet(@PathVariable String username) {
+//        User user = repo.findByUsername(username);
+//        return user.getMonthlyNet();
+//    }
+
+
 
 
 

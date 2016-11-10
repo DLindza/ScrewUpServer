@@ -28,20 +28,33 @@ public class ExpenseController {
        return expenseRepo.findAll();
     }
 
+    @RequestMapping(value = "/expense/{username}", method = RequestMethod.GET)
+    public Iterable<Expense> getUserExpenses(@PathVariable String username) {
+        User user = userRepo.findByUsername(username);
+       return expenseRepo.findByUser(user);
+    }
+
     @RequestMapping(value= "/expense/{username}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Expense addExpense(@PathVariable String username, @RequestBody Expense expense) {
         User user = userRepo.findByUsername(username);
         expense.setUser(user);
+        expense.setCost(expense.getCost());
+        expense.setName(expense.getName());
+        user.addExpenseToBillTotal(expense.getCost());
         expenseRepo.saveAndFlush(expense);
         System.out.println(expense);
         return expense;
     }
 
 
-    @RequestMapping(value ="/expense", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Expense editExpense(@RequestBody Expense expense) {
+    @RequestMapping(value ="/expense/{username}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Expense editExpense(@PathVariable String username,@RequestBody Expense expense) {
+        User user = userRepo.findByUsername(username);
+        expense.setUser(user);
         Expense temp = expenseRepo.findByName(expense.getName());
+        user.subtractExpenseFromBillTotal(temp.getCost());
         temp.setCost(expense.getCost());
+        user.addExpenseToBillTotal(expense.getCost());
         expenseRepo.saveAndFlush(temp);
         return temp;
     }
